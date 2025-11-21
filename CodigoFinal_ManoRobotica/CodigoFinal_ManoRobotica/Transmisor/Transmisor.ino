@@ -11,7 +11,7 @@ struct Payload {
 uint8_t receiverMAC[6] = {0x78, 0x1C, 0x3C, 0xA5, 0xE1, 0xFC};
 Payload tx;
 
-void onSend(const uint8_t *mac_addr, esp_now_send_status_t status) {}
+void onSend(uint8_t *mac_addr, esp_now_send_status_t status) {}
 
 void setup() {
   Serial.begin(115200);
@@ -44,3 +44,4 @@ void loop() {
   esp_now_send(receiverMAC, (uint8_t*)&tx, sizeof(tx));
   delay(20); // ~50 Hz
 }
+
