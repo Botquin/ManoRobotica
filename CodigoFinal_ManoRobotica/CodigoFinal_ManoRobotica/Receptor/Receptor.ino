@@ -3,12 +3,12 @@
 #include <ESP32Servo.h>
 
 // Pines para los servos
-const int SERVO_PINS[5] = {23, 22, 19, 18, 17};
+int SERVO_PINS[5] = {23, 22, 19, 18, 17};
 Servo servos[5];
 
-// Rango de pulsos típico
-const int minUs = 500;
-const int maxUs = 2400;
+// Rango de pulsos
+int minUs = 500;
+int maxUs = 2400;
 
 // Estructura recibida
 struct Payload {
@@ -19,7 +19,7 @@ volatile Payload rx;
 volatile bool hasNew = false;
 
 // Callback al recibir datos
-void onRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+void onRecv(uint8_t *mac, uint8_t *incomingData, int len) {
   if (len == sizeof(Payload)) {
     memcpy((void*)&rx, incomingData, sizeof(Payload));
     hasNew = true;
@@ -44,14 +44,14 @@ void setup() {
   }
   esp_now_register_recv_cb(onRecv);
 
-  Serial.println("Receptor listo ⚙️");
+  Serial.println("Receptor listo");
 }
 
 void loop() {
   if (hasNew) {
     noInterrupts();
     Payload local;
-    memcpy(&local, (const void*)&rx, sizeof(Payload));
+    memcpy(&local, (void*)&rx, sizeof(Payload));
     hasNew = false;
     interrupts();
 
@@ -62,3 +62,4 @@ void loop() {
     }
   }
 }
+
